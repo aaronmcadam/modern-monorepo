@@ -1,0 +1,49 @@
+# Stage 1: Prune the workspace
+FROM node:24 AS pruner
+WORKDIR /app
+RUN npm install -g pnpm
+COPY . .
+RUN pnpm dlx turbo prune @demo/backend --docker
+
+# Stage 2: Install dependencies (cached layer)
+FROM node:24 AS installer
+WORKDIR /app
+RUN npm install -g pnpm
+
+# Copy pruned lockfile and package.json files
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/json/ .
+
+# Install dependencies (this layer is cached unless package.json changes)
+RUN pnpm install --frozen-lockfile
+
+# Stage 3: Build
+FROM node:24 AS builder
+WORKDIR /app
+RUN npm install -g pnpm
+
+# Copy dependencies from installer
+COPY --from=installer /app/ .
+
+# Copy source code
+COPY --from=pruner /app/out/full/ .
+
+# Build the application
+RUN pnpm build --filter=@demo/backend
+
+# Stage 4: Production runner
+FROM node:24 AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Copy built application and dependencies
+COPY --from=builder /app/integrations/demo/backend/dist ./integrations/demo/backend/dist
+COPY --from=builder /app/integrations/demo/backend/package.json ./integrations/demo/backend/package.json
+COPY --from=builder /app/integrations/demo/backend/node_modules ./integrations/demo/backend/node_modules
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+
+EXPOSE 4000
+
+CMD ["node", "integrations/demo/backend/dist/index.js"]

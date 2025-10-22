@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "ASIAN KUNG-FU GENERATION - Sol-fa",
+    "price": 1999,
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "ASIAN KUNG-FU GENERATION - Fanclub",
+    "price": 2199,
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "ASIAN KUNG-FU GENERATION - Kimi Tsunagi Five M",
+    "price": 3199,
+    "inStock": false
+  },
+  {
+    "id": 4,
+    "name": "Boris - Pink",
+    "price": 4999,
+    "inStock": true
+  },
+  {
+    "id": 5,
+    "name": "Boris - Flood",
+    "price": 3499,
+    "inStock": false
+  },
+  {
+    "id": 6,
+    "name": "Boris - Akuma no Uta",
+    "price": 2999,
+    "inStock": true
+  },
+  {
+    "id": 7,
+    "name": "Mass of the Fermenting Dregs - World is Yours",
+    "price": 2999,
+    "inStock": true
+  },
+  {
+    "id": 8,
+    "name": "RADWIMPS - Your Name",
+    "price": 2799,
+    "inStock": true
+  },
+  {
+    "id": 9,
+    "name": "Yuragi - Nightlife",
+    "price": 2599,
+    "inStock": true
+  },
+  {
+    "id": 10,
+    "name": "Uchu Nekoko - Kimi no You ni Ikireru Nara",
+    "price": 2399,
+    "inStock": false
+  }
+]

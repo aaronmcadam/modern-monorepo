@@ -1,0 +1,13 @@
+@import "@workspace/ui/globals.css";
+
+/* Demo app theme customization - shows integrators how to override */
+:root {
+  /* Override primary color to blue */
+  --primary: oklch(0.5 0.2 250);
+  --primary-foreground: oklch(0.985 0 0);
+}
+
+.dark {
+  --primary: oklch(0.6 0.25 250);
+  --primary-foreground: oklch(0.145 0 0);
+}

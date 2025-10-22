@@ -1,0 +1,29 @@
+{
+  "name": "modern-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "clean": "pnpm clean:turbo && pnpm clean:node-modules && pnpm install",
+    "clean:turbo": "turbo clean && rimraf .turbo",
+    "clean:node-modules": "rimraf node_modules apps/**/node_modules packages/**/node_modules integrations/**/node_modules",
+    "docker:build": "docker compose -f deployments/docker-compose.yaml build",
+    "docker:up": "docker compose -f deployments/docker-compose.yaml up -d",
+    "docker:down": "docker compose -f deployments/docker-compose.yaml down",
+    "docker:verify": "bash scripts/verify-stable-builds.sh"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "turbo": "^2.5.8",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@10.19.0",
+  "engines": {
+    "node": ">=24"
+  }
+}
