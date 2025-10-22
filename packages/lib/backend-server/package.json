@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/backend-server",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup src --dts",
+    "dev": "tsup src --watch",
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "fastify": "^5.2.0"
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
+    "@types/node": "^24.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "5.9.2"
+  }
+}

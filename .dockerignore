@@ -1,0 +1,9 @@
+node_modules
+*.log
+*.md
+.dockerignore
+.git
+.gitignore
+.next
+.turbo
+.vscode

@@ -1,0 +1,19 @@
+{
+  "name": "@workspace/frontend-testing",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "./vitest-config": "./vitest.config.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf .turbo"
+  },
+  "dependencies": {
+    "vitest": "catalog:"
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

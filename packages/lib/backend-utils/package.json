@@ -1,0 +1,19 @@
+{
+  "name": "@workspace/backend-utils",
+  "version": "0.0.1",
+  "main": "./dist/utils.js",
+  "exports": {
+    ".": "./dist/utils.js"
+  },
+  "scripts": {
+    "build": "tsup src --dts",
+    "dev": "tsup src --watch",
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf dist .turbo"
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
+    "tsup": "^8.3.5",
+    "typescript": "catalog:"
+  }
+}

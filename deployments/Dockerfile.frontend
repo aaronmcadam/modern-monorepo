@@ -1,0 +1,59 @@
+# Multi-stage Docker build optimized for Turborepo monorepos
+#
+# This Dockerfile uses a 4-stage pattern to maximize Docker layer caching:
+#
+# 1. BASE      - Node.js base image
+# 2. WORKSPACE - Extract isolated workspace using `turbo prune`
+# 3. BUILDER   - Install dependencies and build the application
+# 4. RUNNER    - Minimal production image with only runtime artifacts
+#
+# Key optimization: turbo prune creates an isolated workspace with only the packages
+# and dependencies needed for the target app, preventing unrelated monorepo changes
+# from invalidating Docker's cache.
+#
+# Learn more:
+# - Monorepo Docker challenges: https://turborepo.com/docs/guides/tools/docker
+# - turbo prune --docker flag: https://turborepo.com/docs/reference/prune#--docker
+# - Detailed architecture: See specs/DEPLOYMENT.md
+
+# Stage 1: Base image
+FROM node:24 AS base
+WORKDIR /app
+RUN npm install -g pnpm
+
+# Stage 2: Create isolated workspace
+FROM base AS workspace
+COPY . .
+RUN pnpm dlx turbo prune @demo/frontend --docker
+
+# Stage 3: Install dependencies and build
+FROM base AS builder
+
+# Copy pruned lockfile and package.json files
+COPY --from=workspace /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=workspace /app/out/json/ .
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code and build
+COPY --from=workspace /app/out/full/ .
+RUN pnpm build --filter=@demo/frontend
+
+# Stage 4: Production runner
+FROM base AS runner
+
+# Don't run production as root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/integrations/demo/frontend/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/integrations/demo/frontend/.next/static ./integrations/demo/frontend/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/integrations/demo/frontend/public ./integrations/demo/frontend/public
+
+EXPOSE 3000
+
+CMD ["node", "integrations/demo/frontend/server.js"]

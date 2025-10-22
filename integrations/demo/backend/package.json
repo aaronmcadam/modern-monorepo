@@ -1,0 +1,25 @@
+{
+  "name": "@demo/backend",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup src --dts",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@workspace/backend-server": "workspace:*",
+    "@workspace/products-backend": "workspace:*",
+    "fastify": "^5.2.0"
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
+    "@types/node": "^24.0.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "5.9.2"
+  }
+}
